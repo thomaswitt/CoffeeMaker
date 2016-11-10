@@ -1,0 +1,21 @@
+{
+    "bridge": {
+        "name": "HomeBridge",
+        "username": "CC:22:3D:E3:CE:30",
+        "port": 51826,
+        "pin": "031-45-154"
+    },
+
+    "description": "Homebridge Pi Server",
+
+    "accessories": [ {
+      "accessory": "Http",
+      "name": "Coffeemaker",
+      "switchHandling": "no",
+      "http_method": "GET",
+      "on_url":      "http://coffeemaker.local/arduino/custom/turn_on",
+      "off_url":     "http://coffeemaker.local/arduino/custom/turn_off",
+      "service": "Switch",
+      "brightnessHandling": "no"
+    } ]
+}
