@@ -97,13 +97,16 @@ void process(WifiData client) {
     } else if (request == F("make_coffee")) {
       toCoffeemaker(F("FA:0C\r\n"));
       httpResult(httpReturn, fromCoffeemaker());
-    /*
+    } else if (request == F("status")) {
+      httpResult(httpReturn, getStatus());
+    } else if (request == F("status_binary")) {
+      httpResult(httpReturn, getStatus() != "off" ? "1" : "0");
     } else if (request.startsWith("command")) {
       // Execute ANY command via web service - use with caution!
       request.replace("command/", "");
       toCoffeemaker(request + "\r\n");
+      delay(100);
       httpResult(httpReturn, fromCoffeemaker());
-    */
     } else {
       httpResult(httpReturn, "Unknown command " + request, false);
     }
@@ -158,7 +161,7 @@ void toCoffeemaker(String outputString)
 }
 
 String fromCoffeemaker() {
-  delay(50);
+  delay(10);
   String inputString = "";
   byte d0, d1, d2, d3;
   char d4 = 255;
@@ -187,3 +190,27 @@ String fromCoffeemaker() {
   }
 }
 
+String getStatus() {
+  String input = "";
+  String onOff = "";
+  String status = "";
+  toCoffeemaker(F("RR:03\r\n"));
+  delay(100);
+  input = fromCoffeemaker();
+  onOff = input.substring(4, 5);
+  status = input.substring(6, 7);
+  status += input.substring(25, 28);
+  if (onOff == "0") {
+    return F("off");
+  } else if (status == "C045") {
+    return F("no_tray");
+  } else if (status == "C404") {
+    return F("no_water");
+  } else if (status == "C444") {
+    return F("no_tray_and_no_water");
+  } else if (status == "4005") {
+    return F("on");
+  } else {
+    return "Unknown (" + status + " / " + input + ")";
+  }
+}

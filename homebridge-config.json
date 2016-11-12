@@ -11,10 +11,12 @@
     "accessories": [ {
       "accessory": "Http",
       "name": "Coffeemaker",
-      "switchHandling": "no",
+      "switchHandling": "yes",
       "http_method": "GET",
       "on_url":      "http://coffeemaker.local/arduino/custom/turn_on",
       "off_url":     "http://coffeemaker.local/arduino/custom/turn_off",
+      "off_url":     "http://coffeemaker.local/arduino/custom/turn_off",
+      "status_url":  "http://coffeemaker.local/arduino/custom/status_binary",
       "service": "Switch",
       "brightnessHandling": "no"
     } ]
